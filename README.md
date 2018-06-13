@@ -1,0 +1,2 @@
+# vanity-eth-cli
+💥 WIP 💥

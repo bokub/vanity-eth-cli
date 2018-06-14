@@ -1,0 +1,8 @@
+package: github.com/bokub/vanity-eth-cli
+import:
+- package: github.com/ethereum/go-ethereum
+  version: ^1.8.11
+  subpackages:
+  - common
+  - crypto
+  - crypto/sha3

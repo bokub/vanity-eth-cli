@@ -1,0 +1,18 @@
+hash: c7f93ec60da7d6d89a71533b00cdee5b6ac83add209b64ca08267a1e892c07c9
+updated: 2018-06-14T10:33:17.46989229+02:00
+imports:
+- name: github.com/btcsuite/btcd
+  version: 86fed781132ac890ee03e906e4ecd5d6fa180c64
+  subpackages:
+  - btcec
+- name: github.com/ethereum/go-ethereum
+  version: dea1ce052a10cd7d401a5c04f83f371a06fe293c
+  subpackages:
+  - common
+  - common/hexutil
+  - common/math
+  - crypto
+  - crypto/secp256k1
+  - crypto/sha3
+  - rlp
+testImports: []

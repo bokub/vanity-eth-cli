@@ -22,19 +22,22 @@ install: glide i
 script:
 - go test -v $(glide nv)
 - go build
-- if [ "${LATEST}" = "true" ]; then xgo --targets="linux/amd64,linux/386,windows/amd64,windows/386,darwin/amd64,darwin/386" -ldflags "-X main.Rev=`git rev-parse --short HEAD`" ./; fi
+- if [ "${LATEST}" = "true" ]; then
+    xgo --targets="linux/amd64,linux/386,windows/amd64,windows/386,darwin/amd64,darwin/386" -ldflags "-X main.Rev=`git rev-parse --short HEAD`" ./;
+    rename.ul 386 x32 * && rename.ul amd64 x64 * && rename.ul darwin-10.6 macOS * && rename.ul windows-4.0 windows *;
+  fi
 
 deploy:
   provider: releases
   skip_cleanup: true
   api_key: $TOKEN
   file:
-  - vanity-eth-cli-darwin-10.6-386
-  - vanity-eth-cli-darwin-10.6-amd64
-  - vanity-eth-cli-linux-386
-  - vanity-eth-cli-linux-amd64
-  - vanity-eth-cli-windows-4.0-386.exe
-  - vanity-eth-cli-windows-4.0-amd64.exe
+  - vanity-eth-cli-linux-x32
+  - vanity-eth-cli-linux-x64
+  - vanity-eth-cli-macOS-x32
+  - vanity-eth-cli-macOS-x64
+  - vanity-eth-cli-windows-x32.exe
+  - vanity-eth-cli-windows-x64.exe
 
   on:
     repo: bokub/vanity-eth-cli

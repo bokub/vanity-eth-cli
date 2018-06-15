@@ -5,10 +5,32 @@ go:
 - "1.9"
 - master
 
-before_install: curl https://glide.sh/get | sh
+matrix:
+  include:
+  - go: master
+    env: LATEST=true
+
+before_install:
+- curl https://glide.sh/get | sh
+- go get github.com/mitchellh/gox
 
 install: glide i
 
 script:
 - go test -v $(glide nv)
 - go build
+- if [ "${LATEST}" = "true" ]; then gox -os="linux darwin windows" -arch="amd64" -output="logshare.." -ldflags "-X main.Rev=`git rev-parse --short HEAD`" -verbose ./...; fi
+
+
+deploy:
+  provider: releases
+  skip_cleanup: true
+  api_key: $TOKEN
+  file:
+  - logshare.windows.amd64.exe
+  - logshare.darwin.amd64
+  - logshare.linux.amd64
+  on:
+    repo: cloudflare/logshare
+    tags: true
+    condition: $LATEST = true

@@ -2,6 +2,7 @@ vendor
 
 # Binaries for programs and plugins
 *.exe
+/vanity-eth-cli-*
 *.exe~
 *.dll
 *.so

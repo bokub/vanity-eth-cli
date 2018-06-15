@@ -1,9 +1,12 @@
 language: go
 
+sudo: required
+services:
+  - docker
+
 go:
 - "1.7"
 - "1.9"
-- master
 
 matrix:
   include:
@@ -19,18 +22,21 @@ install: glide i
 script:
 - go test -v $(glide nv)
 - go build
-- if [ "${LATEST}" = "true" ]; then gox -os="linux darwin windows" -arch="amd64" -output="logshare.." -ldflags "-X main.Rev=`git rev-parse --short HEAD`" -verbose ./...; fi
-
+- if [ "${LATEST}" = "true" ]; then xgo --targets="linux/amd64,linux/386,windows/amd64,windows/386,darwin/amd64,darwin/386" -ldflags "-X main.Rev=`git rev-parse --short HEAD`" ./; fi
 
 deploy:
   provider: releases
   skip_cleanup: true
   api_key: $TOKEN
   file:
-  - logshare.windows.amd64.exe
-  - logshare.darwin.amd64
-  - logshare.linux.amd64
+  - vanity-eth-cli-darwin-10.6-386
+  - vanity-eth-cli-darwin-10.6-amd64
+  - vanity-eth-cli-linux-386
+  - vanity-eth-cli-linux-amd64
+  - vanity-eth-cli-windows-4.0-386.exe
+  - vanity-eth-cli-windows-4.0-amd64.exe
+
   on:
-    repo: cloudflare/logshare
+    repo: bokub/vanity-eth-cli
     tags: true
     condition: $LATEST = true

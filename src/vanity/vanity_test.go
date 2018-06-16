@@ -44,6 +44,35 @@ func TestGetVanityWallet(t *testing.T) {
 	assert.Equal(t, "0x1", res.Wallet.Address.Hex()[:3])
 }
 
+func BenchmarkGetRandomWallet(b *testing.B) {
+	w := &Wallet{}
+	for n := 0; n < b.N; n++ {
+		w = getRandomWallet()
+	}
+	_ = w
+}
+
+func BenchmarkToCaseSensitive(b *testing.B) {
+	w := Wallet0xABcd1
+	for n := 0; n < b.N; n++ {
+		w.Address.Hex()
+	}
+}
+
+// Generic benchmark
+func benchVanity(wallet *Wallet, input string, checksum bool, b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		wallet.isValidVanityAddress(input, checksum)
+	}
+}
+
+func BenchmarkInvalidCharsSensitive(b *testing.B)     { benchVanity(Wallet0xABcd1, "DeadBeef", true, b) }
+func BenchmarkInvalidCaseSensitiveFirst(b *testing.B) { benchVanity(Wallet0xABcd1, "abcd1", true, b) }
+func BenchmarkInvalidCaseSensitiveLast(b *testing.B)  { benchVanity(Wallet0xABcd1, "ABcD1", true, b) }
+func BenchmarkInvalidCharsInsensitive(b *testing.B)   { benchVanity(Wallet0xABcd1, "deadbeef", false, b) }
+func BenchmarkValidCharsSensitive(b *testing.B)       { benchVanity(Wallet0xABcd1, "ABcd1", true, b) }
+func BenchmarkValidCharsInsensitive(b *testing.B)     { benchVanity(Wallet0xABcd1, "abccd1", false, b) }
+
 func walletFromPrivateKey(privateKey string) *Wallet {
 	pr, _ := crypto.HexToECDSA(privateKey)
 	return &Wallet{

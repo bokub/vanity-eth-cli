@@ -1,5 +1,5 @@
-hash: c7f93ec60da7d6d89a71533b00cdee5b6ac83add209b64ca08267a1e892c07c9
-updated: 2018-06-14T10:33:17.46989229+02:00
+hash: 86ef77d3d823ebc41c8018692aa6983145e2dc20abbf98a54ce4d2ad75dd7fe6
+updated: 2018-06-16T09:33:24.1329838+02:00
 imports:
 - name: github.com/btcsuite/btcd
   version: 86fed781132ac890ee03e906e4ecd5d6fa180c64
@@ -15,4 +15,8 @@ imports:
   - crypto/secp256k1
   - crypto/sha3
   - rlp
+- name: github.com/stretchr/testify
+  version: f35b8ab0b5a2cef36673838d662e249dd9c94686
+  subpackages:
+  - assert
 testImports: []

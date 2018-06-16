@@ -15,17 +15,20 @@ matrix:
 
 before_install:
 - curl https://glide.sh/get | sh
-- if [ "${LATEST}" = "true" ]; then go get github.com/karalabe/xgo; fi
+- if [ "${LATEST}" = "true" ] && [ $(git tag --points-at HEAD) ]; then go get github.com/karalabe/xgo; fi
 
 install: glide i
 
 script:
-- go test -v $(glide nv)
+- ./run_tests.sh
 - go build
-- if [ "${LATEST}" = "true" ]; then
+- if [ "${LATEST}" = "true" ] && [ $(git tag --points-at HEAD) ]; then
     xgo --targets="linux/amd64,linux/386,windows/amd64,windows/386,darwin/amd64,darwin/386" -ldflags "-X main.Rev=`git rev-parse --short HEAD`" ./;
     rename.ul 386 x32 * && rename.ul amd64 x64 * && rename.ul darwin-10.6 macOS * && rename.ul windows-4.0 windows *;
   fi
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
 
 deploy:
   provider: releases

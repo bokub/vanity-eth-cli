@@ -2,6 +2,7 @@
 
 [![Build Status](https://img.shields.io/travis/bokub/vanity-eth-cli/master.svg?style=flat-square)](https://travis-ci.org/bokub/vanity-eth-cli)
 [![License](https://img.shields.io/badge/license-MIT-ff9860.svg?style=flat-square)](https://raw.githubusercontent.com/bokub/vanity-eth-cli/master/LICENSE)
+[![Codecov](https://img.shields.io/codecov/c/github/bokub/vanity-eth-cli.svg?style=flat-square)](https://codecov.io/gh/bokub/vanity-eth-cli)
 
 Simple and efficient ETH vanity address generator.
 

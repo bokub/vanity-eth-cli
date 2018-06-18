@@ -12,9 +12,6 @@ func HasLetters(input string) bool {
 }
 
 func RoundDuration(d, r time.Duration) time.Duration {
-	if r <= 0 {
-		return d
-	}
 	if m := d % r; m+m < r {
 		d = d - m
 	} else {

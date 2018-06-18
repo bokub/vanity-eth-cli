@@ -3,6 +3,9 @@ package vanity
 import (
 	"testing"
 
+	"crypto/ecdsa"
+
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/stretchr/testify/assert"
 )
@@ -42,14 +45,38 @@ func TestGetVanityWallet(t *testing.T) {
 	res = <-ch
 	assert.True(t, res.Success)
 	assert.Equal(t, "0x1", res.Wallet.Address.Hex()[:3])
+
+	go GetVanityWallet("DeadBeef1234", true, ch)
+	res = <-ch
+	assert.False(t, res.Success)
 }
 
 func BenchmarkGetRandomWallet(b *testing.B) {
-	w := &Wallet{}
+	var w *Wallet
 	for n := 0; n < b.N; n++ {
 		w = getRandomWallet()
 	}
 	_ = w
+}
+
+func BenchmarkGenerateKey(b *testing.B) {
+	var private *ecdsa.PrivateKey
+	for n := 0; n < b.N; n++ {
+		private, _ = crypto.GenerateKey()
+	}
+	_ = private
+}
+
+func BenchmarkPrivateToPublic(b *testing.B) {
+	var address common.Address
+	private, _ := crypto.GenerateKey()
+
+	b.ResetTimer()
+	for n := 0; n < b.N; n++ {
+		address = crypto.PubkeyToAddress(private.PublicKey)
+
+	}
+	_ = address
 }
 
 func BenchmarkToCaseSensitive(b *testing.B) {
@@ -66,12 +93,11 @@ func benchVanity(wallet *Wallet, input string, checksum bool, b *testing.B) {
 	}
 }
 
-func BenchmarkInvalidCharsSensitive(b *testing.B)     { benchVanity(Wallet0xABcd1, "DeadBeef", true, b) }
-func BenchmarkInvalidCaseSensitiveFirst(b *testing.B) { benchVanity(Wallet0xABcd1, "abcd1", true, b) }
-func BenchmarkInvalidCaseSensitiveLast(b *testing.B)  { benchVanity(Wallet0xABcd1, "ABcD1", true, b) }
-func BenchmarkInvalidCharsInsensitive(b *testing.B)   { benchVanity(Wallet0xABcd1, "deadbeef", false, b) }
-func BenchmarkValidCharsSensitive(b *testing.B)       { benchVanity(Wallet0xABcd1, "ABcd1", true, b) }
-func BenchmarkValidCharsInsensitive(b *testing.B)     { benchVanity(Wallet0xABcd1, "abccd1", false, b) }
+func BenchmarkInvalidCharsSensitive(b *testing.B)   { benchVanity(Wallet0xABcd1, "DeadBeef", true, b) }
+func BenchmarkInvalidCaseSensitive(b *testing.B)    { benchVanity(Wallet0xABcd1, "ABcD1", true, b) }
+func BenchmarkInvalidCharsInsensitive(b *testing.B) { benchVanity(Wallet0xABcd1, "deadbeef", false, b) }
+func BenchmarkValidCharsSensitive(b *testing.B)     { benchVanity(Wallet0xABcd1, "ABcd1", true, b) }
+func BenchmarkValidCharsInsensitive(b *testing.B)   { benchVanity(Wallet0xABcd1, "abccd1", false, b) }
 
 func walletFromPrivateKey(privateKey string) *Wallet {
 	pr, _ := crypto.HexToECDSA(privateKey)

@@ -7,9 +7,9 @@ import (
 
 	"encoding/hex"
 
+	"github.com/bokub/vanity-eth-cli/src/utils"
 	"github.com/bokub/vanity-eth-cli/src/vanity"
 	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/bokub/vanity-eth-cli/src/utils"
 )
 
 const ResetLine = "\r\033[K"
@@ -23,4 +23,3 @@ func DisplayResult(result *vanity.VanityOutput, attempts int64, elapsed time.Dur
 func DisplaySpeed(speed int64) {
 	fmt.Printf("%sSpeed: %d hashes / second", ResetLine, speed)
 }
-

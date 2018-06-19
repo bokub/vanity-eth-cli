@@ -7,19 +7,20 @@ import (
 
 	"time"
 
+	"os"
+
 	"github.com/bokub/vanity-eth-cli/src/terminal"
 	"github.com/bokub/vanity-eth-cli/src/utils"
 	"github.com/bokub/vanity-eth-cli/src/vanity"
 )
 
-const Input = "Ab0"
 const Checksum = true
 
 func main() {
+	input, checksum := getInput()
+
 	cpus := runtime.NumCPU()
 	ch := make(chan vanity.VanityOutput, cpus)
-
-	input, checksum := getInput()
 
 	for i := 0; i < cpus; i++ {
 		go vanity.GetVanityWallet(input, checksum, ch)
@@ -38,10 +39,12 @@ func main() {
 	}
 }
 
-// TODO get from cli args
 func getInput() (string, bool) {
-	input := Input
-	checksum := Checksum && utils.HasLetters(Input)
+	input, err := terminal.ReadString()
+	if err != nil {
+		os.Exit(1)
+	}
+	checksum := Checksum && utils.HasLetters(input)
 	if !checksum {
 		input = strings.ToLower(input)
 	}

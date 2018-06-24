@@ -16,7 +16,8 @@ Examples: `0xc0ffee254729296a45a3885639AC7E10F9d54979`, or `0x999999cf1046e68e36
 
 ## How to use
 
-1. Find and download the [latest release](https://github.com/bokub/vanity-eth-cli/releases) for your system
+1. [Download the latest release](https://github.com/bokub/vanity-eth-cli/releases/latest) for your operating system. Choose the 
+`x86` version for a 32-bit system, or the `x64` version for a 64-bit system.
 
 2. If you want to run Vanity-ETH from your terminal, run `chmod +x vanity-eth-cli-*`
 

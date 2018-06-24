@@ -24,7 +24,7 @@ script:
 - ./run_tests.sh
 - go build
 - if [ "${LATEST}" = "true" ] && [ $(git tag --points-at HEAD) ]; then
-    xgo --targets="linux/amd64,linux/386,windows/amd64,windows/386,darwin/amd64,darwin/386" -out Vanity-ETH -ldflags "-X main.Rev=`git rev-parse --short HEAD`" ./;
+    xgo --targets="linux/amd64,linux/386,windows/amd64,windows/386,darwin/amd64,darwin/386" -out Vanity-ETH -v -ldflags "-X main.Rev=`git rev-parse --short HEAD`" ./;
     rename.ul 386 x86 * && rename.ul amd64 x64 * && rename.ul darwin-10.6 macOS * && rename.ul windows-4.0 windows *;
   fi
 
@@ -35,7 +35,13 @@ deploy:
   provider: releases
   skip_cleanup: true
   api_key: $TOKEN
-  file: Vanity-ETH-*
+  file:
+  - Vanity-ETH-linux-x86
+  - Vanity-ETH-linux-x64
+  - Vanity-ETH-macOS-x86
+  - Vanity-ETH-macOS-x64
+  - Vanity-ETH-windows-x86.exe
+  - Vanity-ETH-windows-x64.exe
   on:
     repo: bokub/vanity-eth-cli
     tags: true
